@@ -17,8 +17,6 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - POSTGRES_NAME=sigit_idn
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - DATABASE_URL=${DATABASE_URL}
     depends_on:
       - db

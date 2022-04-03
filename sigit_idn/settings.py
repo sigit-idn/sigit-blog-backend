@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 import os
 from pathlib import Path
+import re
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -81,14 +82,17 @@ WSGI_APPLICATION = 'sigit_idn.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+db_url = os.environ.get('DATABASE_URL')
+db_data = re.compile(r'^postgres://(?P<user>[^:]+):(?P<password>[^@]+)@(?P<host>[^:]+):(?P<port>[0-9]+)/(?P<name>[^/]+)$')
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'sigit_idn',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': 'db',
-        'PORT': '5432',
+        'ENGINE': os.environ.get('DATABASE_ENGINE', 'django.db.backends.postgresql'),
+        'NAME': os.environ.get('DATABASE_NAME', db_data.search(db_url).group('name')),
+        'USER': os.environ.get('DATABASE_USER', db_data.search(db_url).group('user')),
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD', db_data.search(db_url).group('password')),
+        'HOST': os.environ.get('DATABASE_HOST', db_data.search(db_url).group('host')),
+        'PORT': os.environ.get('DATABASE_PORT', db_data.search(db_url).group('port')),
     }
 }
 
