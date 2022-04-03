@@ -16,21 +16,22 @@ class Post(models.Model):
 	class Post(models.Model):
 		author, title, thumbnail, content, category, tags, views, reads, likes, dislikes, like_ip, dislike_ip, created_date, updated_date
 	"""
-	author        = models.ForeignKey   ('auth.User', on_delete=models.CASCADE           )
-	title         = models.CharField    (max_length=200                                  )
-	slug          = models.SlugField    (max_length=200, unique=True                     )
-	thumbnail     = models.ImageField   (upload_to='.', blank=True                       )
-	content       = models.TextField    (                                                )
-	category      = models.ForeignKey   ('Category', on_delete=models.SET_NULL, null=True)
-	tags          = models.TextField    (null=True                                       )
-	views         = models.IntegerField (default=0                                       )
-	reads         = models.IntegerField (default=0                                       )
-	likes         = models.IntegerField (default=0                                       )
-	dislikes      = models.IntegerField (default=0                                       )
-	like_ip       = models.TextField    (default=''                                       )
-	dislike_ip    = models.TextField    (default=''                                       )
-	created_date  = models.DateTimeField(default=timezone.now                            )
-	updated_date  = models.DateTimeField(auto_now=True                                   )
+	author        = models.ForeignKey   ('auth.User', on_delete=models.CASCADE						)
+	title         = models.CharField    (max_length=200                       						)
+	slug          = models.SlugField    (max_length=200, unique=True, 
+																				default=str(title).lower().replace(' ', '-')		)
+	thumbnail     = models.ImageField   (upload_to='.', blank=True            						)
+	content       = models.TextField    (                                     						)
+	category      = models.ForeignKey   ('Category', on_delete=models.SET_NULL, null=True	)
+	tags          = models.TextField    (null=True                            						)
+	views         = models.IntegerField (default=0                            						)
+	reads         = models.IntegerField (default=0                            						)
+	likes         = models.IntegerField (default=0                            						)
+	dislikes      = models.IntegerField (default=0                            						)
+	like_ip       = models.TextField    (default=''                           						)
+	dislike_ip    = models.TextField    (default=''                           						)
+	created_date  = models.DateTimeField(default=timezone.now                 						)
+	updated_date  = models.DateTimeField(auto_now=True                        						)
 
 	def publish(self):
 		self.published_date = timezone.now()
