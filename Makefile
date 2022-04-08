@@ -1,14 +1,17 @@
 up:
+	down
 	docker-compose up -d
-
-reup:
-	docker-compose up -d --force-recreate
 
 logs:
 	docker-compose logs -f
 
+rebuild:
+	make down
+	docker-compose up -d --build
+	
 down:
 	docker-compose down
+
 
 sh:
 	docker-compose exec -it app sh
@@ -21,3 +24,9 @@ migrate:
 
 makemigrations:
 	docker-compose exec -it app python manage.py makemigrations
+
+make runserver:
+	docker-compose exec -it app python manage.py runserver
+
+make freeze:
+	docker-compose exec -it app pip freeze 

@@ -22,10 +22,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-sj5a_aa!jwu!(@e2!8b019s(w5w6-(flt^_1op)mi+2c(&srar'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('ENVIRONMENT') != 'production'
 
 ALLOWED_HOSTS = ['*']
 
@@ -83,16 +83,16 @@ WSGI_APPLICATION = 'sigit_idn.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 db_url = os.environ.get('DATABASE_URL')
-db_data = re.compile(r'^postgres://(?P<user>[^:]+):(?P<password>[^@]+)@(?P<host>[^:]+):(?P<port>[0-9]+)/(?P<name>[^/]+)$')
+db_pattern = re.compile(r'^(?P<db_type>[^:]+):\/\/(?P<user>[^:]+):(?P<password>[^@]+)@(?P<host>[^:]+):(?P<port>[0-9]+)/(?P<name>[^?]+)$')
 
 DATABASES = {
     'default': {
         'ENGINE': os.environ.get('DATABASE_ENGINE', 'django.db.backends.postgresql'),
-        'NAME': os.environ.get('DATABASE_NAME', db_data.search(db_url).group('name')),
-        'USER': os.environ.get('DATABASE_USER', db_data.search(db_url).group('user')),
-        'PASSWORD': os.environ.get('DATABASE_PASSWORD', db_data.search(db_url).group('password')),
-        'HOST': os.environ.get('DATABASE_HOST', db_data.search(db_url).group('host')),
-        'PORT': os.environ.get('DATABASE_PORT', db_data.search(db_url).group('port')),
+        'NAME': os.environ.get('DATABASE_NAME', db_pattern.search(db_url).group('name')),
+        'USER': os.environ.get('DATABASE_USER', db_pattern.search(db_url).group('user')),
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD', db_pattern.search(db_url).group('password')),
+        'HOST': os.environ.get('DATABASE_HOST', db_pattern.search(db_url).group('host')),
+        'PORT': os.environ.get('DATABASE_PORT', db_pattern.search(db_url).group('port')),
     }
 }
 
