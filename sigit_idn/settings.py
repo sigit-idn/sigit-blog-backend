@@ -87,12 +87,12 @@ db_pattern = re.compile(r'^(?P<db_type>[^:]+):\/\/(?P<user>[^:]+):(?P<password>[
 
 DATABASES = {
     'default': {
-        'ENGINE': os.environ.get('DATABASE_ENGINE', 'django.db.backends.postgresql'),
-        'NAME': os.environ.get('DATABASE_NAME', db_pattern.search(db_url).group('name')),
-        'USER': os.environ.get('DATABASE_USER', db_pattern.search(db_url).group('user')),
-        'PASSWORD': os.environ.get('DATABASE_PASSWORD', db_pattern.search(db_url).group('password')),
-        'HOST': os.environ.get('DATABASE_HOST', db_pattern.search(db_url).group('host')),
-        'PORT': os.environ.get('DATABASE_PORT', db_pattern.search(db_url).group('port')),
+        'ENGINE': os.environ.get('DATABASE_ENGINE'),
+        'NAME': os.environ.get('DATABASE_NAME'),
+        'USER': os.environ.get('DATABASE_USER'),
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
+        'HOST': os.environ.get('DATABASE_HOST'),
+        'PORT': os.environ.get('DATABASE_PORT'),
     }
 }
 
